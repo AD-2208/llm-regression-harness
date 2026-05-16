@@ -2,9 +2,9 @@
 LLM Regression Harness — CLI entrypoint
 
 Usage:
-    python harness.py baseline --model mistral
-    python harness.py check --model mistral
-    python harness.py check --model mistral --threshold 0.80
+    python harness.py baseline --model gpt-oss:20b-cloud
+    python harness.py check --model gpt-oss:20b-cloud
+    python harness.py check --model gpt-oss:20b-cloud --threshold 0.80
 """
 
 import argparse
@@ -17,7 +17,7 @@ from scorer import score_result, summarise_results, DEFAULT_THRESHOLD
 from reporter import save_json_report, save_markdown_report, print_summary
 
 OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-DEFAULT_MODEL = "mistral"
+DEFAULT_MODEL = "gpt-oss:20b-cloud"
 TEMPERATURE = 0.0  # Always 0 for deterministic baselines
 
 def get_client() -> Client:

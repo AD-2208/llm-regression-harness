@@ -35,18 +35,18 @@ jobs:
           curl -fsSL https://ollama.com/install.sh | sh
           ollama serve &
           sleep 5
-          ollama pull mistral
+          ollama pull gpt-oss:20b-cloud
 
       - name: Check baselines exist
         run: |
           if [ -z "$(ls -A baselines/)" ]; then
             echo "ERROR: baselines/ directory is empty."
-            echo "Run 'python harness.py baseline --model mistral' locally and commit the baselines/ folder."
+            echo "Run 'python harness.py baseline --model gpt-oss:20b-cloud' locally and commit the baselines/ folder."
             exit 1
           fi
 
       - name: Run regression check
-        run: python harness.py check --model mistral --threshold 0.85
+        run: python harness.py check --model gpt-oss:20b-cloud --threshold 0.85
 
       - name: Upload regression report
         if: always()
