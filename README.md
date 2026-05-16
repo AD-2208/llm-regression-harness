@@ -3,7 +3,7 @@
 > Catches prompt regressions before they reach production — semantic drift scoring
 > across model versions with CI/CD integration.
 
-![Tests](https://github.com/YOUR_USERNAME/llm-regression-harness/actions/workflows/eval.yml/badge.svg)
+![Tests](https://github.com/AD-2208/llm-regression-harness/actions/workflows/eval.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
