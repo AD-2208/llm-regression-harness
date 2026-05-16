@@ -65,6 +65,7 @@ pytest eval/
 ---
 
 ## Project Structure
+```
 llm-regression-harness/
 ├── eval/
 │   ├── test_corpus.json        # Prompt/expected-output pairs
@@ -80,6 +81,7 @@ llm-regression-harness/
 │       └── eval.yml            # CI pipeline
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
