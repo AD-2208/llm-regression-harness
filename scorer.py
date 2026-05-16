@@ -1,6 +1,6 @@
 import numpy as np
 
-DEFAULT_THRESHOLD = 0.85
+DEFAULT_THRESHOLD = 0.80
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """

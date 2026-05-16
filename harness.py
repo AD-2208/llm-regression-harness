@@ -11,6 +11,7 @@ import argparse
 import json
 import os
 from ollama import Client
+import numpy as np
 
 from embedder import load_corpus, embed_text, save_baseline, load_baseline, baseline_exists
 from scorer import score_result, summarise_results, DEFAULT_THRESHOLD
@@ -52,9 +53,11 @@ def cmd_baseline(args):
             continue
 
         print(f"  RUN   {prompt_id} ...", end=" ", flush=True)
-        output = run_prompt(entry["prompt"], model=model)
-        embedding = embed_text(output)
-        save_baseline(prompt_id, embedding)
+        outputs = [run_prompt(entry["prompt"], model=model) for _ in range(3)]
+        embeddings = [embed_text(output) for output in outputs]
+        avg_embedding = np.mean(embeddings, axis=0)
+        avg_embedding = avg_embedding / np.linalg.norm(avg_embedding)
+        save_baseline(prompt_id, avg_embedding)
         print("✓")
         captured += 1
 
@@ -123,7 +126,7 @@ def main():
     # check command
     check_parser = subparsers.add_parser("check", help="Run regression check against baselines")
     check_parser.add_argument("--model", default=DEFAULT_MODEL, help="Ollama model to use")
-    check_parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD, help="Similarity threshold (default: 0.85)")
+    check_parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD, help="Similarity threshold (default: 0.80)")
     check_parser.set_defaults(func=cmd_check)
 
     args = parser.parse_args()

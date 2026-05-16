@@ -1,0 +1,225 @@
+{
+  "timestamp": "20260516_155203",
+  "model": "gpt-oss:20b-cloud",
+  "summary": {
+    "total": 30,
+    "passed": 28,
+    "failed": 2,
+    "pass_rate": 0.9333,
+    "avg_similarity": 0.9255,
+    "min_similarity": 0.6883,
+    "max_similarity": 1.0
+  },
+  "results": [
+    {
+      "id": "sum_001",
+      "similarity": 0.9279,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1279
+    },
+    {
+      "id": "sum_002",
+      "similarity": 0.9375,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1375
+    },
+    {
+      "id": "sum_003",
+      "similarity": 0.9404,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1404
+    },
+    {
+      "id": "sum_004",
+      "similarity": 0.9476,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1476
+    },
+    {
+      "id": "sum_005",
+      "similarity": 0.9062,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1062
+    },
+    {
+      "id": "sum_006",
+      "similarity": 0.9405,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1405
+    },
+    {
+      "id": "cls_001",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "cls_002",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "cls_003",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "cls_004",
+      "similarity": 0.976,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.176
+    },
+    {
+      "id": "cls_005",
+      "similarity": 0.8415,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.0415
+    },
+    {
+      "id": "cls_006",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "ins_001",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "ins_002",
+      "similarity": 0.7908,
+      "threshold": 0.8,
+      "passed": false,
+      "delta": -0.0092
+    },
+    {
+      "id": "ins_003",
+      "similarity": 0.6883,
+      "threshold": 0.8,
+      "passed": false,
+      "delta": -0.1117
+    },
+    {
+      "id": "ins_004",
+      "similarity": 0.9108,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1108
+    },
+    {
+      "id": "ins_005",
+      "similarity": 0.9827,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1827
+    },
+    {
+      "id": "ins_006",
+      "similarity": 0.969,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.169
+    },
+    {
+      "id": "rsn_001",
+      "similarity": 0.9597,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1597
+    },
+    {
+      "id": "rsn_002",
+      "similarity": 0.9231,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1231
+    },
+    {
+      "id": "rsn_003",
+      "similarity": 0.894,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.094
+    },
+    {
+      "id": "rsn_004",
+      "similarity": 0.908,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.108
+    },
+    {
+      "id": "rsn_005",
+      "similarity": 0.8444,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.0444
+    },
+    {
+      "id": "rsn_006",
+      "similarity": 0.9369,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1369
+    },
+    {
+      "id": "sty_001",
+      "similarity": 0.8994,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.0994
+    },
+    {
+      "id": "sty_002",
+      "similarity": 0.9095,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1095
+    },
+    {
+      "id": "sty_003",
+      "similarity": 0.9587,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1587
+    },
+    {
+      "id": "sty_004",
+      "similarity": 1.0,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.2
+    },
+    {
+      "id": "sty_005",
+      "similarity": 0.9399,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.1399
+    },
+    {
+      "id": "sty_006",
+      "similarity": 0.8307,
+      "threshold": 0.8,
+      "passed": true,
+      "delta": 0.0307
+    }
+  ]
+}

@@ -15,7 +15,7 @@ def save_json_report(results: list[dict], summary: dict, model: str):
         "summary": summary,
         "results": results
     }
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
     print(f"JSON report saved: {path}")
     return path
@@ -53,7 +53,7 @@ def save_markdown_report(results: list[dict], summary: dict, model: str):
     for r in passed:
         lines.append(f"| `{r['id']}` | {r['similarity']} | {r['threshold']} | {r['delta']} |")
 
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
     print(f"Markdown report saved: {path}")
     return path
