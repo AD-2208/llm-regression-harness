@@ -1,0 +1,57 @@
+name: LLM Regression Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  regression-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install and start Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &
+          sleep 5
+          ollama pull mistral
+
+      - name: Check baselines exist
+        run: |
+          if [ -z "$(ls -A baselines/)" ]; then
+            echo "ERROR: baselines/ directory is empty."
+            echo "Run 'python harness.py baseline --model mistral' locally and commit the baselines/ folder."
+            exit 1
+          fi
+
+      - name: Run regression check
+        run: python harness.py check --model mistral --threshold 0.85
+
+      - name: Upload regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-report
+          path: reports/
+          retention-days: 30

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "sum_001",
+    "category": "summarisation",
+    "prompt": "Summarise the following in exactly one sentence: 'The mitochondria is the powerhouse of the cell. It generates ATP through oxidative phosphorylation, converting nutrients into usable energy. This process is essential for cellular function and survival.'",
+    "tags": ["summarisation", "brevity", "factual"],
+    "notes": "Should retain the ATP/energy production meaning. One sentence only."
+  },
+  {
+    "id": "sum_002",
+    "category": "summarisation",
+    "prompt": "In two sentences, summarise what machine learning is to someone who has never heard of it before.",
+    "tags": ["summarisation", "explanation", "audience-aware"],
+    "notes": "Should be accessible, non-technical. Two sentences exactly."
+  },
+  {
+    "id": "sum_003",
+    "category": "summarisation",
+    "prompt": "Summarise the main argument of this passage in one sentence: 'Open source software has transformed the technology industry by allowing developers worldwide to collaborate, inspect, and improve codebases freely. This has accelerated innovation, reduced costs, and democratised access to powerful tools that were previously only available to well-funded organisations.'",
+    "tags": ["summarisation", "argument-extraction"],
+    "notes": "Core claim: open source accelerated innovation by enabling collaboration."
+  },
+  {
+    "id": "sum_004",
+    "category": "summarisation",
+    "prompt": "Give a three-bullet summary of why sleep is important for human health.",
+    "tags": ["summarisation", "list-format", "health"],
+    "notes": "Exactly three bullets. Should cover cognitive, physical, and immune/metabolic aspects."
+  },
+  {
+    "id": "sum_005",
+    "category": "summarisation",
+    "prompt": "Summarise the following code in plain English in one sentence: 'for i in range(len(arr)-1): for j in range(len(arr)-i-1): if arr[j] > arr[j+1]: arr[j], arr[j+1] = arr[j+1], arr[j]'",
+    "tags": ["summarisation", "code-to-english"],
+    "notes": "Should identify this as bubble sort. Should not just describe the loops mechanically."
+  },
+  {
+    "id": "sum_006",
+    "category": "summarisation",
+    "prompt": "In one sentence, explain the difference between supervised and unsupervised learning.",
+    "tags": ["summarisation", "ml-concepts", "contrast"],
+    "notes": "Should capture: labelled vs unlabelled data, guided vs pattern-discovery framing."
+  },
+  {
+    "id": "cls_001",
+    "category": "classification",
+    "prompt": "Classify the sentiment of this review as exactly one of: POSITIVE, NEGATIVE, or NEUTRAL. Review: 'The product arrived on time and works as described. Nothing special but does the job.'",
+    "tags": ["classification", "sentiment", "single-label"],
+    "notes": "Expected: NEUTRAL. Stable prompt — any drift to POSITIVE is a regression."
+  },
+  {
+    "id": "cls_002",
+    "category": "classification",
+    "prompt": "Classify the following support ticket into exactly one category: BILLING, TECHNICAL, ACCOUNT, or OTHER. Ticket: 'I was charged twice for my subscription this month and need a refund.'",
+    "tags": ["classification", "support", "single-label"],
+    "notes": "Expected: BILLING. Clear-cut case."
+  },
+  {
+    "id": "cls_003",
+    "category": "classification",
+    "prompt": "Is the following statement a fact or an opinion? Answer with exactly one word — either FACT or OPINION. Statement: 'The Eiffel Tower is located in Paris, France.'",
+    "tags": ["classification", "fact-vs-opinion", "binary"],
+    "notes": "Expected: FACT. Any drift here is a clear failure."
+  },
+  {
+    "id": "cls_004",
+    "category": "classification",
+    "prompt": "Classify the urgency of this message as HIGH, MEDIUM, or LOW. Message: 'Hey, when you get a chance, could you update the team wiki with the new onboarding steps? No rush.'",
+    "tags": ["classification", "urgency", "single-label"],
+    "notes": "Expected: LOW. The phrase 'no rush' is the key signal."
+  },
+  {
+    "id": "cls_005",
+    "category": "classification",
+    "prompt": "Classify this email subject line as SPAM or NOT_SPAM. Subject: 'You have been selected for an exclusive prize — claim now before it expires!!!'",
+    "tags": ["classification", "spam-detection", "binary"],
+    "notes": "Expected: SPAM. Exclamation marks and prize language are strong signals."
+  },
+  {
+    "id": "cls_006",
+    "category": "classification",
+    "prompt": "Classify the programming language used in this snippet using exactly one word: 'SELECT * FROM users WHERE age > 18 ORDER BY created_at DESC;'",
+    "tags": ["classification", "language-detection", "single-label"],
+    "notes": "Expected: SQL. Unambiguous."
+  },
+  {
+    "id": "ins_001",
+    "category": "instruction_following",
+    "prompt": "List exactly five fruits. Use a numbered list. Do not include any explanation or preamble — just the list.",
+    "tags": ["instruction-following", "format", "list"],
+    "notes": "Must be exactly 5 items, numbered, no preamble. Format regression is easy to detect."
+  },
+  {
+    "id": "ins_002",
+    "category": "instruction_following",
+    "prompt": "Respond with only a valid JSON object with two keys: 'name' and 'capital', representing any country and its capital city. No explanation, no markdown fences, just the raw JSON.",
+    "tags": ["instruction-following", "json-output", "format"],
+    "notes": "Output must be parseable JSON. Markdown fences or preamble = format regression."
+  },
+  {
+    "id": "ins_003",
+    "category": "instruction_following",
+    "prompt": "Write a haiku about autumn. A haiku must follow the 5-7-5 syllable structure across three lines.",
+    "tags": ["instruction-following", "creative", "syllable-count"],
+    "notes": "Must be three lines. Syllable count is hard to auto-verify but semantic drift from autumn theme is detectable."
+  },
+  {
+    "id": "ins_004",
+    "category": "instruction_following",
+    "prompt": "Answer the following question using no more than 10 words: 'What is the capital of Australia?'",
+    "tags": ["instruction-following", "length-constraint"],
+    "notes": "Expected answer: Canberra. Must not exceed 10 words. Common regression: model adds explanation."
+  },
+  {
+    "id": "ins_005",
+    "category": "instruction_following",
+    "prompt": "Translate the following to French. Return only the translation, nothing else: 'Good morning, how are you today?'",
+    "tags": ["instruction-following", "translation", "no-preamble"],
+    "notes": "Expected: 'Bonjour, comment allez-vous aujourd'hui?' or close variant. No preamble."
+  },
+  {
+    "id": "ins_006",
+    "category": "instruction_following",
+    "prompt": "Convert this temperature to Celsius and return only the number, no units, no explanation: 98.6 Fahrenheit.",
+    "tags": ["instruction-following", "numeric-output", "no-preamble"],
+    "notes": "Expected: 37 (or 37.0). Any preamble or unit suffix = instruction regression."
+  },
+  {
+    "id": "rsn_001",
+    "category": "reasoning",
+    "prompt": "A bat and a ball cost £1.10 in total. The bat costs £1.00 more than the ball. How much does the ball cost? Show your reasoning, then give the final answer.",
+    "tags": ["reasoning", "maths", "cognitive-bias"],
+    "notes": "Correct: 5p. Common wrong answer: 10p. This is a known cognitive bias trap — good for detecting model degradation."
+  },
+  {
+    "id": "rsn_002",
+    "category": "reasoning",
+    "prompt": "If all Bloops are Razzles, and all Razzles are Lazzles, are all Bloops definitely Lazzles? Answer yes or no, then explain why in one sentence.",
+    "tags": ["reasoning", "logic", "syllogism"],
+    "notes": "Expected: Yes. Transitive property. One sentence explanation required."
+  },
+  {
+    "id": "rsn_003",
+    "category": "reasoning",
+    "prompt": "A store is having a 20% off sale. An item originally costs £80. After the discount, there is an additional 10% off the sale price. What is the final price? Show your working.",
+    "tags": ["reasoning", "maths", "multi-step"],
+    "notes": "Expected: £57.60. Two-step discount — common error is applying 30% total instead of sequential."
+  },
+  {
+    "id": "rsn_004",
+    "category": "reasoning",
+    "prompt": "Which is heavier: a kilogram of feathers or a kilogram of steel? Explain your answer in one sentence.",
+    "tags": ["reasoning", "trick-question", "concept"],
+    "notes": "Expected: they are equal. A model that hedges or gets this wrong is a clear regression signal."
+  },
+  {
+    "id": "rsn_005",
+    "category": "reasoning",
+    "prompt": "You have a 3-litre jug and a 5-litre jug. You need exactly 4 litres of water. Describe the steps to measure exactly 4 litres.",
+    "tags": ["reasoning", "planning", "multi-step"],
+    "notes": "Classic water jug problem. Steps: fill 5L, pour into 3L, discard 3L, pour remaining 2L into 3L, fill 5L again, pour into 3L until full (1L goes in), leaving 4L in 5L jug."
+  },
+  {
+    "id": "rsn_006",
+    "category": "reasoning",
+    "prompt": "A doctor gives you three pills and tells you to take one every half hour. How many minutes will the pills last?",
+    "tags": ["reasoning", "trick-question", "time"],
+    "notes": "Expected: 60 minutes. Common wrong answer: 90. First pill taken at t=0, second at t=30, third at t=60."
+  },
+  {
+    "id": "sty_001",
+    "category": "style_rewriting",
+    "prompt": "Rewrite the following sentence in a formal, professional tone: 'Hey, just wanted to check if you got my email about the meeting — let me know!'",
+    "tags": ["style", "tone", "formal"],
+    "notes": "Should remove casual language. Should retain the core meaning: following up on email about meeting."
+  },
+  {
+    "id": "sty_002",
+    "category": "style_rewriting",
+    "prompt": "Rewrite this in plain English so a 10-year-old could understand: 'The patient was administered a subcutaneous injection of 0.5ml epinephrine following an anaphylactic episode.'",
+    "tags": ["style", "simplification", "audience"],
+    "notes": "Should simplify medical jargon. Key concepts to retain: injection, allergic reaction, medicine."
+  },
+  {
+    "id": "sty_003",
+    "category": "style_rewriting",
+    "prompt": "Rewrite the following as a single tweet (under 280 characters, no hashtags): 'Researchers at the University of Glasgow have developed a new method for detecting early-stage Parkinson's disease using a simple wrist-worn sensor that monitors micro-tremors during sleep.'",
+    "tags": ["style", "compression", "social-media"],
+    "notes": "Must be under 280 chars. No hashtags. Must retain: Glasgow, Parkinson's, wrist sensor, sleep."
+  },
+  {
+    "id": "sty_004",
+    "category": "style_rewriting",
+    "prompt": "Rewrite this passive voice sentence in active voice: 'The report was submitted by the team before the deadline.'",
+    "tags": ["style", "grammar", "active-voice"],
+    "notes": "Expected: 'The team submitted the report before the deadline.' or close variant."
+  },
+  {
+    "id": "sty_005",
+    "category": "style_rewriting",
+    "prompt": "Make this sentence more concise without losing meaning: 'Due to the fact that the weather conditions outside were not particularly favourable, we made the decision to postpone the outdoor event that had been planned.'",
+    "tags": ["style", "conciseness", "editing"],
+    "notes": "Target: under 15 words. Something like: 'We postponed the outdoor event due to bad weather.'"
+  },
+  {
+    "id": "sty_006",
+    "category": "style_rewriting",
+    "prompt": "Rewrite this in a warm, encouraging tone for a job rejection email: 'You were not selected for this position.'",
+    "tags": ["style", "tone", "empathy"],
+    "notes": "Should soften the message while keeping it honest. Should not be sycophantic or misleading."
+  }
+]
