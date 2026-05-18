@@ -53,11 +53,13 @@ def cmd_baseline(args):
             continue
 
         print(f"  RUN   {prompt_id} ...", end=" ", flush=True)
-        outputs = [run_prompt(entry["prompt"], model=model) for _ in range(3)]
-        embeddings = [embed_text(output) for output in outputs]
-        avg_embedding = np.mean(embeddings, axis=0)
-        avg_embedding = avg_embedding / np.linalg.norm(avg_embedding)
-        save_baseline(prompt_id, avg_embedding)
+        #outputs = [run_prompt(entry["prompt"], model=model) for _ in range(3)]
+        #embeddings = [embed_text(output) for output in outputs]
+        #avg_embedding = np.mean(embeddings, axis=0)
+        #avg_embedding = avg_embedding / np.linalg.norm(avg_embedding)
+        output = run_prompt(entry["prompt"], model=model)
+        embedding = embed_text(output)
+        save_baseline(prompt_id, embedding)
         print("✓")
         captured += 1
 
