@@ -1,0 +1,16 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Reports (generated at runtime, not source code)
+reports/
+
+# Local environment
+.env
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
