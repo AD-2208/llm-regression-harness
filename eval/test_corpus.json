@@ -198,13 +198,13 @@
   {
     "id": "rsn_001",
     "category": "reasoning",
-    "prompt": "A bat and a ball cost £1.10 in total. The bat costs £1.00 more than the ball. How much does the ball cost? Show your reasoning, then give the final answer.",
+    "prompt": "A bat and a ball cost £1.10 in total. What is the combined cost of the bat and ball? Just give the total.",
     "tags": [
       "reasoning",
       "maths",
       "cognitive-bias"
     ],
-    "notes": "Correct: 5p. Common wrong answer: 10p. This is a known cognitive bias trap — good for detecting model degradation."
+    "notes": "DEMO REGRESSION: prompt rewritten to ask for total instead of the ball price. Semantic meaning completely changed."
   },
   {
     "id": "rsn_002",
@@ -264,13 +264,13 @@
   {
     "id": "sty_001",
     "category": "style_rewriting",
-    "prompt": "Rewrite the following sentence in a formal, professional tone: 'Hey, just wanted to check if you got my email about the meeting — let me know!'",
+    "prompt": "Translate the following to Spanish: 'Hey, just wanted to check if you got my email about the meeting — let me know!'",
     "tags": [
       "style",
       "tone",
       "formal"
     ],
-    "notes": "Should remove casual language. Should retain the core meaning: following up on email about meeting."
+    "notes": "DEMO REGRESSION: prompt changed from tone rewriting to translation. Completely different task."
   },
   {
     "id": "sty_002",
