@@ -12,22 +12,32 @@
 ## Demo
 
 **Regression detected** — two prompts were semantically changed, harness catches both:
+
+```
 Running regression check — model: mistral, threshold: 0.8
 Corpus size: 30 prompts
-CHECK rsn_001 ... ✗ FAIL  similarity=0.7672  delta=-0.0328
-CHECK sty_001 ... ✗ FAIL  similarity=0.1934  delta=-0.6066
+
+  CHECK rsn_001 ... ✗ FAIL  similarity=0.7672  delta=-0.0328
+  CHECK sty_001 ... ✗ FAIL  similarity=0.1934  delta=-0.6066
+
 REGRESSION CHECK SUMMARY
 Total prompts : 30  |  Passed: 28  |  Failed: 2  |  Pass rate: 93.3%
 ❌ REGRESSIONS (2):
-rsn_001    similarity=0.7672   delta=-0.0328
-sty_001    similarity=0.1934   delta=-0.6066
+  rsn_001    similarity=0.7672   delta=-0.0328
+  sty_001    similarity=0.1934   delta=-0.6066
+```
 
 **Clean run on main** — all 30 prompts pass after restoring correct prompts:
+
+```
 Running regression check — model: mistral, threshold: 0.8
 Corpus size: 30 prompts
-[all 30 prompts: ✓ PASS  similarity=1.0]
+
+  [all 30 prompts: ✓ PASS  similarity=1.0]
+
 Total prompts : 30  |  Passed: 30  |  Failed: 0  |  Pass rate: 100.0%
 ✅ No regressions detected.
+```
 
 See the [live demo PR](https://github.com/AD-2208/llm-regression-harness/pull/1)
 for the full diff of what changed and the CI failure it triggered.
@@ -103,13 +113,12 @@ python harness.py baseline --model mistral
 # Run regression check
 python harness.py check --model mistral
 
-# Or via pytest
-pytest eval/ -v
 ```
 
 ---
 
 ## Project Structure
+```
 llm-regression-harness/
 ├── eval/
 │   ├── test_corpus.json        # 30 prompts across 5 task categories
@@ -125,7 +134,7 @@ llm-regression-harness/
 │       └── eval.yml            # CI pipeline
 ├── requirements.txt
 └── README.md
-
+```
 ---
 
 ## Test Corpus
