@@ -210,6 +210,57 @@ concern — the same way mature software teams treat code quality.
 
 ---
 
+## Known Limitations and Roadmap
+
+### Current Limitations
+
+**Local pytest non-determinism**
+Running `pytest eval/` locally produces inconsistent results because Mistral
+(and most local LLMs) exhibit output variance across cold starts even at
+temperature 0.0. This is a known property of quantised models where floating
+point rounding differs between inference sessions. The `harness.py check`
+command is the recommended local evaluation path — it is tuned and stable.
+`pytest eval/` is intended for CI use where the inference environment is
+consistent within a single workflow run.
+
+**Ollama-only LLM support**
+The harness currently only supports models available via Ollama. OpenAI,
+Anthropic, and other cloud providers require swapping the `run_prompt`
+function in `harness.py` — approximately 10 lines of code — but this is
+not implemented yet. Cloud model support would also require managing API
+key secrets in CI.
+
+**No baseline approval workflow**
+When you intentionally change a prompt and want to accept the new behaviour,
+you run `python harness.py baseline --force`. There is no explicit
+"approve this regression and update baseline" step with an audit trail.
+A production implementation would require a deliberate review and approval
+before a baseline update is committed.
+
+**Baselines are model-specific**
+Baselines captured with Mistral cannot be used to check against Llama3 or
+any other model. Switching models requires a full baseline recapture. There
+is no cross-model comparison mode yet.
+
+### Roadmap
+
+- [ ] **Cloud model support** — OpenAI and Anthropic API adapters via a
+  pluggable `run_prompt` interface, with environment variable API key
+  management for CI
+- [ ] **Multi-model comparison** — run the same suite across multiple models
+  simultaneously and produce a side-by-side similarity matrix
+- [ ] **Baseline approval workflow** — explicit `harness.py approve` command
+  that updates a baseline with a required commit message and timestamp,
+  creating an audit trail of intentional behaviour changes
+- [ ] **LangSmith integration** — trace-level debugging showing which
+  reasoning step caused semantic drift, not just the final output delta
+- [ ] **Threshold auto-tuning** — analyse historical similarity variance per
+  prompt and suggest optimal per-prompt thresholds automatically
+- [ ] **HTML report** — visual regression report with side-by-side output
+  comparison and similarity score timeline across runs
+
+---
+
 ## License
 
 MIT
