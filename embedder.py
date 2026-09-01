@@ -17,16 +17,6 @@ def get_model():
 def embed_text(text: str) -> np.ndarray:
     return get_model().encode(text, normalize_embeddings=True)
 
-def embed_text_stable(text: str, runs: int = 3) -> np.ndarray:
-    """
-    Run embedding multiple times and average — produces a more stable
-    baseline that accounts for minor tokenisation variance.
-    """
-    embeddings = [get_model().encode(text, normalize_embeddings=True) for _ in range(runs)]
-    avg = np.mean(embeddings, axis=0)
-    avg = avg / np.linalg.norm(avg)
-    return avg
-
 def save_baseline(prompt_id: str, embedding: np.ndarray):
     os.makedirs(BASELINES_DIR, exist_ok=True)
     path = os.path.join(BASELINES_DIR, f"{prompt_id}.npy")

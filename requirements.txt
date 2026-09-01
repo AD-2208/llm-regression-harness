@@ -2,3 +2,7 @@ sentence-transformers==3.3.1
 ollama==0.3.3
 numpy==2.2.5
 pytest==8.3.3
+
+# OPTIONAL
+openai>=1.0.0
+anthropic>=0.40.0

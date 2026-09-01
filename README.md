@@ -23,7 +23,7 @@ Corpus size: 30 prompts
 REGRESSION CHECK SUMMARY
 Total prompts : 30  |  Passed: 28  |  Failed: 2  |  Pass rate: 93.3%
 ❌ REGRESSIONS (2):
-  rsn_001    similarity=0.7672   delta=-0.0328
+  rsn_001    similarity=0.7672   delta=-0.0328  
   sty_001    similarity=0.1934   delta=-0.6066
 ```
 
@@ -104,15 +104,22 @@ git clone https://github.com/AD-2208/llm-regression-harness
 cd llm-regression-harness
 pip install -r requirements.txt
 
-# Requires Ollama — https://ollama.com
+# Default provider: Ollama (local, free)
 ollama pull mistral
-
-# Capture baseline embeddings
 python harness.py baseline --model mistral
-
-# Run regression check
 python harness.py check --model mistral
 
+# Or use OpenAI
+pip install openai
+export OPENAI_API_KEY=sk-...
+python harness.py baseline --model gpt-4o-mini --provider openai
+python harness.py check --model gpt-4o-mini --provider openai
+
+# Or use Anthropic
+pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+python harness.py baseline --model claude-sonnet-4-5 --provider anthropic
+python harness.py check --model claude-sonnet-4-5 --provider anthropic
 ```
 
 ---
@@ -123,6 +130,11 @@ llm-regression-harness/
 ├── eval/
 │   ├── test_corpus.json        # 30 prompts across 5 task categories
 │   └── test_regression.py      # pytest-compatible regression tests
+├── providers/
+│   ├── base.py                 # Abstract provider interface
+│   ├── ollama_provider.py      # Local models via Ollama
+│   ├── openai_provider.py      # OpenAI API
+│   └── anthropic_provider.py   # Anthropic API
 ├── harness.py                  # CLI entrypoint (baseline + check)
 ├── embedder.py                 # Sentence-transformer embedding logic
 ├── scorer.py                   # Cosine similarity + threshold logic
@@ -156,7 +168,8 @@ llm-regression-harness/
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `similarity_threshold` | `0.80` | Global threshold — below this = regression |
-| `model` | `mistral` | Any Ollama-compatible model |
+| `model` | `mistral` | Any model supported by the active provider |
+| `provider` | `ollama` | `ollama`, `openai`, or `anthropic` |
 | `embedding_model` | `all-MiniLM-L6-v2` | Sentence-transformers model |
 | `temperature` | `0.0` | Fixed at 0 for deterministic baselines |
 
@@ -227,6 +240,56 @@ This one measures whether it *keeps* doing it correctly across changes.
 Prompt regression is a real production problem that most teams handle manually
 or not at all. This harness treats prompt quality as a first-class engineering
 concern — the same way mature software teams treat code quality.
+
+---
+
+## Known Limitations and Roadmap
+
+### Current Limitations
+
+**Local model non-determinism**
+Some prompts exhibit inherent output variance on quantised local models even
+at temperature 0.0. `cls_001` was measured with similarity as low as 0.544
+between two consecutive, unmodified runs — its threshold was calibrated to
+0.50 based on this observed baseline noise, rather than left at the global
+default, which would produce false positives on an otherwise stable prompt.
+This is a property of local model inference, not a flaw in the scoring
+approach.
+
+**Ollama-only by default**
+The harness ships with an Ollama provider as the default, but also supports
+OpenAI and Anthropic via a pluggable provider interface
+(`providers/base.py`). Adding a new provider — Gemini, a local llama.cpp
+server, anything with a chat-style API — requires one new file implementing
+a single `run(prompt: str) -> str` method, with zero changes to
+`harness.py`, `embedder.py`, or `scorer.py`.
+
+**No baseline approval workflow**
+Updating a baseline after an intentional prompt change uses
+`harness.py baseline --force`, which silently overwrites. There is no
+diff-and-approve step showing old output vs new output before the update
+is committed. This is fine for a solo project but would need addressing
+before team adoption.
+
+**Baselines are model-specific**
+A baseline captured with Mistral cannot be checked against Llama3, GPT-4o,
+or Claude — switching providers or models requires a full baseline
+recapture. There is no cross-model comparison mode.
+
+### Roadmap
+
+- [x] Provider abstraction — Ollama, OpenAI, and Anthropic supported via a
+  common interface
+- [ ] Threshold auto-calibration — run each prompt N times, measure natural
+  variance, suggest a threshold automatically instead of manual tuning
+- [ ] Baseline approval workflow — explicit review step with output diff
+  before a baseline update is committed
+- [ ] Unit tests for `scorer.py` and `embedder.py` — verify the similarity
+  math and save/load round-trip independent of any LLM call
+- [ ] Multi-model comparison — run the same suite across multiple providers
+  simultaneously and produce a side-by-side similarity matrix
+- [ ] HTML report — static styled report with similarity bar chart and
+  pass/fail badges, viewable without opening JSON
 
 ---
 

@@ -72,7 +72,8 @@
       "sentiment",
       "single-label"
     ],
-    "notes": "Expected: NEUTRAL. Stable prompt — any drift to POSITIVE is a regression."
+    "notes": "Expected: NEUTRAL. Observed high variance on Mistral cold-start runs (similarity as low as 0.544 between two unmodified runs) — threshold calibrated down accordingly. See Known Limitations.",
+    "threshold": 0.50
   },
   {
     "id": "cls_002",
