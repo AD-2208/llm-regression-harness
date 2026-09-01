@@ -2,43 +2,31 @@
 LLM Regression Harness — CLI entrypoint
 
 Usage:
-    python harness.py baseline --model gpt-oss:20b-cloud
-    python harness.py check --model gpt-oss:20b-cloud
-    python harness.py check --model gpt-oss:20b-cloud --threshold 0.80
+    python harness.py baseline --model mistral
+    python harness.py baseline --model gpt-4o-mini --provider openai
+    python harness.py check --model mistral
+    python harness.py check --model mistral --threshold 0.80
 """
 
 import argparse
-import json
 import os
-from ollama import Client
-import numpy as np
 
 from embedder import load_corpus, embed_text, save_baseline, load_baseline, baseline_exists
 from scorer import score_result, summarise_results, DEFAULT_THRESHOLD
 from reporter import save_json_report, save_markdown_report, print_summary
+from providers import get_provider
 
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-DEFAULT_MODEL = "gpt-oss:20b-cloud"
+DEFAULT_MODEL = "mistral"
+DEFAULT_PROVIDER = "ollama"
 TEMPERATURE = 0.0  # Always 0 for deterministic baselines
 
-def get_client() -> Client:
-    return Client(host=OLLAMA_HOST)
-
-def run_prompt(prompt: str, model: str = DEFAULT_MODEL) -> str:
-    client = get_client()
-    response = client.chat(
-        model=model,
-        messages=[{"role": "user", "content": prompt}],
-        options={"temperature": TEMPERATURE}
-    )
-    return response["message"]["content"].strip()
 
 def cmd_baseline(args):
     corpus = load_corpus()
-    model = args.model
+    provider = get_provider(args.provider, model=args.model, temperature=TEMPERATURE)
     force = args.force
 
-    print(f"\nCapturing baselines — model: {model}, temperature: {TEMPERATURE}")
+    print(f"\nCapturing baselines — provider: {args.provider}, model: {args.model}, temperature: {TEMPERATURE}")
     print(f"Corpus size: {len(corpus)} prompts\n")
 
     skipped = 0
@@ -53,11 +41,7 @@ def cmd_baseline(args):
             continue
 
         print(f"  RUN   {prompt_id} ...", end=" ", flush=True)
-        #outputs = [run_prompt(entry["prompt"], model=model) for _ in range(3)]
-        #embeddings = [embed_text(output) for output in outputs]
-        #avg_embedding = np.mean(embeddings, axis=0)
-        #avg_embedding = avg_embedding / np.linalg.norm(avg_embedding)
-        output = run_prompt(entry["prompt"], model=model)
+        output = provider.run(entry["prompt"])
         embedding = embed_text(output)
         save_baseline(prompt_id, embedding)
         print("✓")
@@ -67,12 +51,13 @@ def cmd_baseline(args):
     print("Baselines saved to baselines/")
     print("Commit baselines/ to git so CI can use them.\n")
 
+
 def cmd_check(args):
     corpus = load_corpus()
-    model = args.model
+    provider = get_provider(args.provider, model=args.model, temperature=TEMPERATURE)
     threshold = args.threshold
 
-    print(f"\nRunning regression check — model: {model}, threshold: {threshold}")
+    print(f"\nRunning regression check — provider: {args.provider}, model: {args.model}, threshold: {threshold}")
     print(f"Corpus size: {len(corpus)} prompts\n")
 
     results = []
@@ -88,9 +73,11 @@ def cmd_check(args):
 
         print(f"  CHECK {prompt_id} ...", end=" ", flush=True)
         baseline = load_baseline(prompt_id)
-        output = run_prompt(entry["prompt"], model=model)
+        output = provider.run(entry["prompt"])
         current_embedding = embed_text(output)
-        result = score_result(prompt_id, baseline, current_embedding, threshold=threshold)
+
+        prompt_threshold = entry.get("threshold", threshold)
+        result = score_result(prompt_id, baseline, current_embedding, threshold=prompt_threshold)
         results.append(result)
 
         status = "✓ PASS" if result["passed"] else "✗ FAIL"
@@ -103,15 +90,15 @@ def cmd_check(args):
     summary = summarise_results(results)
     print_summary(summary, results)
 
-    save_json_report(results, summary, model)
-    save_markdown_report(results, summary, model)
+    save_json_report(results, summary, args.model)
+    save_markdown_report(results, summary, args.model)
 
     if missing:
         print(f"Warning: {len(missing)} prompts skipped (no baseline): {missing}\n")
 
-    # Exit code 1 if any regressions — important for CI
     if summary["failed"] > 0:
         exit(1)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -119,20 +106,21 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # baseline command
     baseline_parser = subparsers.add_parser("baseline", help="Capture baseline embeddings")
-    baseline_parser.add_argument("--model", default=DEFAULT_MODEL, help="Ollama model to use")
+    baseline_parser.add_argument("--model", default=DEFAULT_MODEL, help="Model name")
+    baseline_parser.add_argument("--provider", default=DEFAULT_PROVIDER, choices=["ollama", "openai", "anthropic"], help="LLM provider")
     baseline_parser.add_argument("--force", action="store_true", help="Overwrite existing baselines")
     baseline_parser.set_defaults(func=cmd_baseline)
 
-    # check command
     check_parser = subparsers.add_parser("check", help="Run regression check against baselines")
-    check_parser.add_argument("--model", default=DEFAULT_MODEL, help="Ollama model to use")
+    check_parser.add_argument("--model", default=DEFAULT_MODEL, help="Model name")
+    check_parser.add_argument("--provider", default=DEFAULT_PROVIDER, choices=["ollama", "openai", "anthropic"], help="LLM provider")
     check_parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD, help="Similarity threshold (default: 0.80)")
     check_parser.set_defaults(func=cmd_check)
 
     args = parser.parse_args()
     args.func(args)
+
 
 if __name__ == "__main__":
     main()
