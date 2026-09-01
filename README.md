@@ -231,14 +231,16 @@ concern — the same way mature software teams treat code quality.
 ### Current Limitations
 
 **Local model non-determinism**
-Some prompts exhibit inherent output variance on quantised local models even
-at temperature 0.0. `cls_001` was measured with similarity as low as 0.544
-between two consecutive, unmodified runs — its threshold was calibrated to
-0.50 based on this observed baseline noise, rather than left at the global
-default, which would produce false positives on an otherwise stable prompt.
-This is a property of local model inference, not a flaw in the scoring
-approach. `pytest eval/` and `harness.py check` are both affected equally
-since they now share the same provider abstraction.
+Mistral (and most quantised local models) exhibit output variance across
+inference sessions even at temperature 0.0 — this affects different prompts
+unpredictably between runs, not a fixed subset. `cls_001`, `cls_004`,
+`cls_005`, and `ins_003` have all shown similarity scores below 0.80 on at
+least one otherwise-unmodified run, with `cls_005` measured as low as
+0.5929. Their thresholds were calibrated down individually based on this
+observed variance rather than left at the global default. This is a known
+property of local model inference on CI runners specifically — Ollama
+running fresh on a GitHub Actions runner shows more variance than the
+same model running warm on a local machine with cached weights.
 
 **Ollama is the default, not the only option**
 The harness ships with an Ollama provider as the default, but also supports
